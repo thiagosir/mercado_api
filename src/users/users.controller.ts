@@ -3,11 +3,12 @@ import { UserRepository } from "./repositories/users.repository";
 import { CreateUserDTO } from "./users-dto/createUser.dto";
 import { UserEntity } from "./entities/user.entity";
 import { v4 as uuid } from "uuid";
+import { ListaUsuarioDTO } from "./users-dto/ListaUsuario.dto";
 
 
 @Controller('/usuarios')
 export class UserController {
-  constructor(private readonly repository: UserRepository){}
+  constructor(private readonly repository: UserRepository) { }
 
   @Post()
   async createUser(@Body() usersDTO: CreateUserDTO) {
@@ -23,6 +24,14 @@ export class UserController {
 
   @Get()
   async listUsers() {
-    return this.repository.findAll();
+    const saveUsers = await this.repository.findAll();
+    const userList = saveUsers.map(
+      user => new ListaUsuarioDTO(
+        user.id,
+        user.name
+      )
+    );
+    
+    return userList;
   }
 }
