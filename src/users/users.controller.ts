@@ -51,6 +51,11 @@ export class UserController {
 
   @Delete('/:id')
   async removeUser(@Param('id') id:string){
+    const deletedUser = await this.repository.remove(id)
 
+    return {
+      user: deletedUser,
+      message: 'Usuário removido com sucesso'
+    }
   }
 }
